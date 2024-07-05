@@ -44,9 +44,6 @@ var userSchema = new mongoose.Schema({
     refreshToken:{
         type: String,
     },
-    refreshToken:{
-        type: String,
-    },
     passwordChangedAt:{
         type:String,
     },
