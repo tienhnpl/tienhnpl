@@ -1,0 +1,19 @@
+@model ComicBook
+@{
+    ViewData["Title"] = "Delete Comic Book";
+}
+
+<h1>Delete Comic Book</h1>
+
+<p>Are you sure you want to delete this comic book?</p>
+
+<div>
+    <p><strong>Title:</strong> @Model.Title</p>
+    <p><strong>Author:</strong> @Model.Author</p>
+    <p><strong>Price:</strong> @Model.PricePerDay</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="ComicBookId" />
+    <button class="btn btn-danger" type="submit">Delete</button>
+</form>

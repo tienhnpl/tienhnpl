@@ -1,0 +1,33 @@
+@model IEnumerable<ComicBook>
+@{
+    ViewData["Title"] = "Comic Books";
+}
+
+<h1>Comic Books</h1>
+
+<a class="btn btn-primary" href="@Url.Action("Create", "ComicBooks")">Add New Comic Book</a>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Title</td>
+            <td>@item.Author</td>
+            <td>@item.PricePerDay</td>
+            <td>
+                <a href="@Url.Action("Edit", "ComicBooks", new { id = item.ComicBookId })">Edit</a> |
+                <a href="@Url.Action("Delete", "ComicBooks", new { id = item.ComicBookId })">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
