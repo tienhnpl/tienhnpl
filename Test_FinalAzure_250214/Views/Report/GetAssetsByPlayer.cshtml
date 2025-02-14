@@ -1,0 +1,42 @@
+@model List<Test_FinalAzure_250214.Models.PlayerAssetReportDto>
+
+@{
+    ViewData["Title"] = "Player Assets Report";
+}
+
+<h2>Player Assets Report</h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
+    <tr>
+        <th>No</th>
+        <th>Player Name</th>
+        <th>Level</th>
+        <th>Age</th>
+        <th>Asset Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null && Model.Any())
+    {
+        var index = 1;
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@index</td>
+                <td>@item.PlayerName</td>
+                <td>@item.Level</td>
+                <td>@item.Age</td>
+                <td>@item.AssetName</td>
+            </tr>
+            index++;
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5">No data available</td>
+        </tr>
+    }
+    </tbody>
+</table>
