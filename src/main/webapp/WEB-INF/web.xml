@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>NFT Gallery</display-name>
+
+    <!-- Servlet: Danh sách NFT -->
+    <servlet>
+        <servlet-name>ListNFTServlet</servlet-name>
+        <servlet-class>com.example.class_nftcollection_040425.Servlet.ListNFTServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListNFTServlet</servlet-name>
+        <url-pattern>/list</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlet: Thêm NFT -->
+    <servlet>
+        <servlet-name>AddNFTServlet</servlet-name>
+        <servlet-class>com.example.class_nftcollection_040425.Servlet.AddNFTServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddNFTServlet</servlet-name>
+        <url-pattern>/add</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlet: Sửa NFT -->
+    <servlet>
+        <servlet-name>EditNFTServlet</servlet-name>
+        <servlet-class>com.example.class_nftcollection_040425.Servlet.EditNFTServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditNFTServlet</servlet-name>
+        <url-pattern>/edit</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlet: Xoá NFT -->
+    <servlet>
+        <servlet-name>DeleteNFTServlet</servlet-name>
+        <servlet-class>com.example.class_nftcollection_040425.Servlet.DeleteNFTServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteNFTServlet</servlet-name>
+        <url-pattern>/delete</url-pattern>
+    </servlet-mapping>
+
+    <!-- Servlet: Thay đổi trạng thái -->
+    <servlet>
+        <servlet-name>ChangeStatusServlet</servlet-name>
+        <servlet-class>com.example.class_nftcollection_040425.Servlet.ChangeStatusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChangeStatusServlet</servlet-name>
+        <url-pattern>/change</url-pattern>
+    </servlet-mapping>
+
+    <!-- Listener để tự động tạo DB -->
+    <listener>
+        <listener-class>com.example.class_nftcollection_040425.utils.DatabaseInitializer</listener-class>
+    </listener>
+
+    <!-- Trang mặc định khi vào domain -->
+    <welcome-file-list>
+        <welcome-file>ListNFT.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>
