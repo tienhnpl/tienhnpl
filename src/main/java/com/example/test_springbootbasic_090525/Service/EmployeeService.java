@@ -1,7 +1,7 @@
-package Service;
+package com.example.test_springbootbasic_090525.Service;
 
 
-import Model.Employee;
+import com.example.test_springbootbasic_090525.Model.Employee;
 
 import java.util.List;
 

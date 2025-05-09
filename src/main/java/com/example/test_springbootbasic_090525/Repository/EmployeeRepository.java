@@ -1,6 +1,6 @@
-package Repository;
+package com.example.test_springbootbasic_090525.Repository;
 
-import Model.Employee;
+import com.example.test_springbootbasic_090525.Model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

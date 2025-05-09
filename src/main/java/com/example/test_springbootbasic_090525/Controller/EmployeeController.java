@@ -1,7 +1,7 @@
-package Controller;
+package com.example.test_springbootbasic_090525.Controller;
 
-import Model.Employee;
-import Service.EmployeeService;
+import com.example.test_springbootbasic_090525.Model.Employee;
+import com.example.test_springbootbasic_090525.Service.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package Model;
+package com.example.test_springbootbasic_090525.Model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

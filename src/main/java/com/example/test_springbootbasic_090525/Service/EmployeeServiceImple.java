@@ -1,6 +1,6 @@
-package Service;
-import Model.Employee;
-import Repository.EmployeeRepository;
+package com.example.test_springbootbasic_090525.Service;
+import com.example.test_springbootbasic_090525.Model.Employee;
+import com.example.test_springbootbasic_090525.Repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
