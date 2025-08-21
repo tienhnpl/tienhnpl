@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Content Generator - Tự động tạo bài viết từ VNExpress</title>
+    <title>AI Content Creator | Generate Articles & Videos Automatically</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -11,580 +11,739 @@
     />
     <style>
       .gradient-bg {
-        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
       }
-      .article-card:hover {
+      .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .feature-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
           0 10px 10px -5px rgba(0, 0, 0, 0.04);
       }
-      .loading-spinner {
-        border-top-color: transparent;
-        animation: spin 1s linear infinite;
+      .pricing-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
+      .input-animate {
+        transition: all 0.3s ease;
+      }
+      .input-animate:focus {
+        transform: scale(1.02);
+      }
+      .floating {
+        animation: floating 6s ease-in-out infinite;
+      }
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
         }
-      }
-      .video-thumbnail::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 0.5rem;
+        50% {
+          transform: translateY(-15px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
       }
     </style>
   </head>
-  <body class="bg-gray-50 font-sans">
-    <!-- Header with Login -->
-    <header class="gradient-bg text-white shadow-lg">
-      <div
-        class="container mx-auto px-4 py-4 flex justify-between items-center"
-      >
-        <div class="flex items-center space-x-2">
-          <i class="fas fa-robot text-3xl"></i>
-          <h1 class="text-2xl font-bold">AI Content Generator</h1>
-        </div>
-        <div class="flex items-center space-x-4">
-          <button
-            id="fetchBtn"
-            class="bg-white text-purple-600 px-4 py-2 rounded-full font-semibold hover:bg-purple-100 transition"
-          >
-            <i class="fas fa-sync-alt mr-2"></i>Tải nội dung mới
-          </button>
-          <button
-            id="loginBtn"
-            class="bg-purple-700 text-white px-6 py-2 rounded-full font-semibold hover:bg-purple-800 transition"
-          >
-            <i class="fas fa-sign-in-alt mr-2"></i>Đăng nhập
-          </button>
+  <body class="font-sans bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 flex items-center">
+              <i class="fas fa-robot text-3xl text-purple-600 mr-2"></i>
+              <span class="text-xl font-bold text-gray-900"
+                >AI Content Creator</span
+              >
+            </div>
+          </div>
+          <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+            <a
+              href="#features"
+              class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium"
+              >Features</a
+            >
+            <a
+              href="#how-it-works"
+              class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium"
+              >How It Works</a
+            >
+            <a
+              href="#pricing"
+              class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium"
+              >Pricing</a
+            >
+            <a
+              href="#testimonials"
+              class="text-gray-700 hover:text-purple-600 px-3 py-2 text-sm font-medium"
+              >Testimonials</a
+            >
+          </div>
+          <div class="flex items-center">
+            <button
+              class="bg-white text-purple-600 hover:bg-purple-50 px-4 py-2 rounded-md text-sm font-medium border border-purple-600 mr-2"
+            >
+              Sign In
+            </button>
+          </div>
         </div>
       </div>
-    </header>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-16">
-      <div class="container mx-auto px-4 text-center">
-        <h2 class="text-4xl font-bold mb-6">
-          Tự động tạo bài viết & video từ VNExpress
-        </h2>
-        <p class="text-xl mb-8 max-w-2xl mx-auto">
-          Công nghệ AI sẽ phân tích các bài báo từ VNExpress và tạo ra nội dung
-          chất lượng cao tự động
+    <section class="gradient-bg text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+              Transform Keywords into Engaging Content with AI
+            </h1>
+            <p class="text-lg md:text-xl mb-8 opacity-90">
+              Our advanced AI generates professional articles from news keywords
+              and creates lifelike video presentations with animated avatars
+              reading your content.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <input
+                type="text"
+                placeholder="Enter your email"
+                class="input-animate px-4 py-3 rounded-md text-gray-800 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <button
+                class="gradient-bg text-white px-6 py-3 rounded-md text-sm font-medium hover:opacity-90 transition transform hover:scale-105"
+              >
+                Get Started Free
+              </button>
+            </div>
+            <p class="text-sm mt-3 opacity-80">
+              No credit card required. 7-day free trial.
+            </p>
+          </div>
+          <div class="relative">
+            <div class="video-container">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div
+              class="absolute -bottom-5 -left-5 w-20 h-20 bg-purple-400 rounded-full opacity-20"
+            ></div>
+            <div
+              class="absolute -top-5 -right-5 w-24 h-24 bg-blue-400 rounded-full opacity-20"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Logo Cloud -->
+    <div class="bg-white py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-gray-500 mb-8">
+          Trusted by leading companies worldwide
         </p>
-        <div class="flex justify-center space-x-4">
-          <button
-            class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg hover:bg-purple-100 transition"
+        <div
+          class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center justify-center"
+        >
+          <div class="flex justify-center">
+            <img
+              src="https://via.placeholder.com/120x40?text=TechNews"
+              alt="TechNews"
+              class="h-8 opacity-70 hover:opacity-100 transition"
+            />
+          </div>
+          <div class="flex justify-center">
+            <img
+              src="https://via.placeholder.com/120x40?text=MediaCorp"
+              alt="MediaCorp"
+              class="h-8 opacity-70 hover:opacity-100 transition"
+            />
+          </div>
+          <div class="flex justify-center">
+            <img
+              src="https://via.placeholder.com/120x40?text=DigitalPress"
+              alt="DigitalPress"
+              class="h-8 opacity-70 hover:opacity-100 transition"
+            />
+          </div>
+          <div class="flex justify-center">
+            <img
+              src="https://via.placeholder.com/120x40?text=NewsHub"
+              alt="NewsHub"
+              class="h-8 opacity-70 hover:opacity-100 transition"
+            />
+          </div>
+          <div class="flex justify-center">
+            <img
+              src="https://via.placeholder.com/120x40?text=ContentAI"
+              alt="ContentAI"
+              class="h-8 opacity-70 hover:opacity-100 transition"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Powerful AI Content Generation
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Our platform combines cutting-edge technologies to deliver
+            high-quality content automatically
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Feature 1 -->
+          <div
+            class="feature-card bg-white p-8 rounded-xl shadow-md transition duration-300"
           >
-            <i class="fas fa-play-circle mr-2"></i>Tạo video
-          </button>
-          <button
-            class="bg-purple-700 text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-purple-800 transition"
+            <div
+              class="w-14 h-14 gradient-bg rounded-lg flex items-center justify-center mb-6"
+            >
+              <i class="fas fa-keyboard text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Keyword to Article
+            </h3>
+            <p class="text-gray-600">
+              Simply input keywords from news sources and our AI will generate
+              well-researched, SEO-optimized articles in seconds.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div
+            class="feature-card bg-white p-8 rounded-xl shadow-md transition duration-300"
           >
-            <i class="fas fa-file-alt mr-2"></i>Tạo bài viết
+            <div
+              class="w-14 h-14 gradient-bg rounded-lg flex items-center justify-center mb-6"
+            >
+              <i class="fas fa-user-circle text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              AI Video Narration
+            </h3>
+            <p class="text-gray-600">
+              Our facial animation technology creates realistic avatars that
+              read your content with natural lip-sync and expressions.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div
+            class="feature-card bg-white p-8 rounded-xl shadow-md transition duration-300"
+          >
+            <div
+              class="w-14 h-14 gradient-bg rounded-lg flex items-center justify-center mb-6"
+            >
+              <i class="fas fa-language text-white text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Multi-Language Support
+            </h3>
+            <p class="text-gray-600">
+              Generate content in multiple languages with perfect translations
+              and native-speaking AI narrators.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Create professional content in just three simple steps
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Step 1 -->
+          <div class="text-center">
+            <div
+              class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6"
+            >
+              <span class="text-white text-2xl font-bold">1</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Input Keywords</h3>
+            <p class="text-gray-600">
+              Provide keywords or topics from news sources. Our AI analyzes
+              trends and relevant information.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="text-center">
+            <div
+              class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6"
+            >
+              <span class="text-white text-2xl font-bold">2</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Generate Content
+            </h3>
+            <p class="text-gray-600">
+              Our AI writes the article and prepares the video script with
+              optimal pacing and emphasis.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="text-center">
+            <div
+              class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6"
+            >
+              <span class="text-white text-2xl font-bold">3</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">
+              Download & Publish
+            </h3>
+            <p class="text-gray-600">
+              Receive your article and video ready to publish. Edit if needed or
+              use as-is.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-16 text-center">
+          <button
+            class="gradient-bg text-white px-8 py-3 rounded-md text-sm font-medium hover:opacity-90 transition transform hover:scale-105"
+          >
+            See Live Demo
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-12">
-      <!-- Search and Filter -->
-      <div class="mb-12 bg-white rounded-xl shadow-md p-6">
-        <div
-          class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-        >
-          <div class="relative flex-grow">
-            <input
-              type="text"
-              placeholder="Nhập từ khóa tìm kiếm..."
-              class="w-full px-6 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <i class="fas fa-search absolute right-6 top-3.5 text-gray-400"></i>
-          </div>
-          <div class="flex space-x-2">
-            <select
-              class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
-              <option>Chọn chuyên mục</option>
-              <option>Thời sự</option>
-              <option>Kinh doanh</option>
-              <option>Giải trí</option>
-              <option>Thể thao</option>
-            </select>
-            <select
-              class="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
-              <option>Sắp xếp theo</option>
-              <option>Mới nhất</option>
-              <option>Phổ biến</option>
-            </select>
-          </div>
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Simple, Transparent Pricing
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Choose the plan that fits your content creation needs
+          </p>
         </div>
-      </div>
 
-      <!-- Loading State -->
-      <div
-        id="loading"
-        class="hidden flex-col items-center justify-center py-20"
-      >
-        <div
-          class="w-16 h-16 border-4 border-purple-500 border-solid rounded-full loading-spinner mb-4"
-        ></div>
-        <p class="text-gray-600">Đang tải nội dung từ VNExpress...</p>
-      </div>
-
-      <!-- Articles Section -->
-      <section id="articlesSection" class="mb-16">
-        <h2 class="text-3xl font-bold mb-8 flex items-center">
-          <i class="fas fa-newspaper mr-3 text-purple-600"></i>Bài viết AI tạo
-          từ VNExpress
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-      </section>
-
-      <!-- Videos Section -->
-      <section id="videosSection">
-        <h2 class="text-3xl font-bold mb-8 flex items-center">
-          <i class="fas fa-video mr-3 text-purple-600"></i>Video AI tạo từ
-          VNExpress
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
-      </section>
-    </main>
-
-    <!-- Login Modal -->
-    <div
-      id="loginModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
-    >
-      <div class="bg-white rounded-xl p-8 w-full max-w-md">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-2xl font-bold text-gray-800">Đăng nhập</h3>
-          <button id="closeModal" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        <form>
-          <div class="mb-4">
-            <label class="block text-gray-700 mb-2" for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-          <div class="mb-6">
-            <label class="block text-gray-700 mb-2" for="password"
-              >Mật khẩu</label
-            >
-            <input
-              type="password"
-              id="password"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-          <button
-            type="submit"
-            class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition mb-4"
-          >
-            Đăng nhập
-          </button>
-          <div class="text-center">
-            <a href="#" class="text-purple-600 hover:underline"
-              >Quên mật khẩu?</a
-            >
-            <span class="mx-2 text-gray-400">|</span>
-            <a href="#" class="text-purple-600 hover:underline"
-              >Đăng ký tài khoản</a
-            >
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Pricing Plans -->
-    <section class="py-16 bg-gray-50">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-4">
-          Gói hỗ trợ tạo video AI
-        </h2>
-        <p class="text-gray-600 text-center max-w-2xl mx-auto mb-12">
-          Lựa chọn gói phù hợp để tạo video AI ghép mặt đọc báo tự động từ nội
-          dung VNExpress
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <!-- Basic Plan -->
           <div
-            class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
+            class="pricing-card bg-white p-8 rounded-xl shadow-md border border-gray-200 transition duration-300"
           >
-            <div class="p-6 border-b border-gray-200">
-              <h3 class="text-xl font-bold text-gray-800">Gói Cơ Bản</h3>
-              <p class="text-gray-600 mt-2">Phù hợp cho cá nhân</p>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Starter</h3>
+            <p class="text-gray-600 mb-6">
+              Perfect for individuals and small projects
+            </p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">$19</span>
+              <span class="text-gray-600">/month</span>
             </div>
-            <div class="p-6">
-              <div class="text-3xl font-bold text-purple-600">
-                299.000đ<span class="text-sm font-normal text-gray-500"
-                  >/tháng</span
-                >
-              </div>
-              <ul class="mt-6 space-y-3">
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>5 video/tháng</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>3 khuôn mặt AI lựa chọn</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>Độ dài video tối đa 3 phút</span>
-                </li>
-                <li class="flex items-center text-gray-400">
-                  <i class="fas fa-times text-red-400 mr-2"></i>
-                  <span>Không có logo riêng</span>
-                </li>
-              </ul>
-              <button
-                class="mt-8 w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
-              >
-                Đăng ký ngay
-              </button>
-            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>10 articles/month</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>5 AI videos/month</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>Basic avatar selection</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>English language only</span>
+              </li>
+            </ul>
+            <button
+              class="w-full bg-gray-100 text-gray-800 px-4 py-3 rounded-md text-sm font-medium hover:bg-gray-200 transition"
+            >
+              Get Started
+            </button>
           </div>
 
-          <!-- Pro Plan (Featured) -->
+          <!-- Pro Plan -->
           <div
-            class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-purple-600 transform scale-105"
+            class="pricing-card bg-white p-8 rounded-xl shadow-lg border-2 border-purple-500 transform scale-105 transition duration-300 relative"
           >
             <div
-              class="bg-purple-600 text-white p-2 text-center text-sm font-semibold"
+              class="absolute top-0 right-0 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg"
             >
-              Phổ biến nhất
+              POPULAR
             </div>
-            <div class="p-6 border-b border-gray-200">
-              <h3 class="text-xl font-bold text-gray-800">Gói Pro</h3>
-              <p class="text-gray-600 mt-2">Phù hợp cho doanh nghiệp nhỏ</p>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Professional</h3>
+            <p class="text-gray-600 mb-6">
+              Ideal for content creators and small businesses
+            </p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">$49</span>
+              <span class="text-gray-600">/month</span>
             </div>
-            <div class="p-6">
-              <div class="text-3xl font-bold text-purple-600">
-                799.000đ<span class="text-sm font-normal text-gray-500"
-                  >/tháng</span
-                >
-              </div>
-              <ul class="mt-6 space-y-3">
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>20 video/tháng</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>10 khuôn mặt AI lựa chọn</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>Độ dài video tối đa 10 phút</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>Thêm logo riêng</span>
-                </li>
-              </ul>
-              <button
-                class="mt-8 w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
-              >
-                Đăng ký ngay
-              </button>
-            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>50 articles/month</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>25 AI videos/month</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>Premium avatar selection</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>5 language options</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>Video customization</span>
+              </li>
+            </ul>
+            <button
+              class="w-full gradient-bg text-white px-4 py-3 rounded-md text-sm font-medium hover:opacity-90 transition"
+            >
+              Get Started
+            </button>
           </div>
 
           <!-- Enterprise Plan -->
           <div
-            class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
+            class="pricing-card bg-white p-8 rounded-xl shadow-md border border-gray-200 transition duration-300"
           >
-            <div class="p-6 border-b border-gray-200">
-              <h3 class="text-xl font-bold text-gray-800">Gói Doanh Nghiệp</h3>
-              <p class="text-gray-600 mt-2">Phù hợp cho công ty lớn</p>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Enterprise</h3>
+            <p class="text-gray-600 mb-6">
+              For agencies and high-volume publishers
+            </p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-900">$149</span>
+              <span class="text-gray-600">/month</span>
             </div>
-            <div class="p-6">
-              <div class="text-3xl font-bold text-purple-600">
-                2.999.000đ<span class="text-sm font-normal text-gray-500"
-                  >/tháng</span
-                >
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>Unlimited articles</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>100 AI videos/month</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>All premium avatars</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>15+ language options</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>Advanced customization</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-2"></i>
+                <span>Priority support</span>
+              </li>
+            </ul>
+            <button
+              class="w-full bg-gray-100 text-gray-800 px-4 py-3 rounded-md text-sm font-medium hover:bg-gray-200 transition"
+            >
+              Get Started
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <p class="text-gray-600">
+            Need a custom plan?
+            <a href="#" class="text-purple-600 font-medium hover:underline"
+              >Contact our sales team</a
+            >
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            What Our Customers Say
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Trusted by content creators, marketers, and publishers worldwide
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Testimonial 1 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://randomuser.me/api/portraits/women/32.jpg"
+                alt="Sarah Johnson"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div>
+                <h4 class="font-bold text-gray-900">Sarah Johnson</h4>
+                <p class="text-gray-600 text-sm">Content Marketer</p>
               </div>
-              <ul class="mt-6 space-y-3">
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>Video không giới hạn</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>30+ khuôn mặt AI lựa chọn</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>Độ dài video không giới hạn</span>
-                </li>
-                <li class="flex items-center">
-                  <i class="fas fa-check text-green-500 mr-2"></i>
-                  <span>Tuỳ chỉnh khuôn mặt AI riêng</span>
-                </li>
-              </ul>
-              <button
-                class="mt-8 w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
-              >
-                Liên hệ tư vấn
-              </button>
+            </div>
+            <p class="text-gray-700">
+              "This platform has revolutionized our content creation process. We
+              can now produce 10x more articles and videos with the same team."
+            </p>
+            <div class="mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
             </div>
           </div>
+
+          <!-- Testimonial 2 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://randomuser.me/api/portraits/men/43.jpg"
+                alt="Michael Chen"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div>
+                <h4 class="font-bold text-gray-900">Michael Chen</h4>
+                <p class="text-gray-600 text-sm">News Editor</p>
+              </div>
+            </div>
+            <p class="text-gray-700">
+              "The AI-generated articles are surprisingly accurate and
+              well-written. The video avatars look so realistic our audience
+              can't tell they're AI!"
+            </p>
+            <div class="mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <div class="flex items-center mb-4">
+              <img
+                src="https://randomuser.me/api/portraits/women/65.jpg"
+                alt="Emma Rodriguez"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div>
+                <h4 class="font-bold text-gray-900">Emma Rodriguez</h4>
+                <p class="text-gray-600 text-sm">Digital Agency Owner</p>
+              </div>
+            </div>
+            <p class="text-gray-700">
+              "Our clients are amazed by the quality we can deliver so quickly.
+              The multilingual support has helped us expand to new markets
+              effortlessly."
+            </p>
+            <div class="mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-20">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-6">
+          Ready to Transform Your Content Creation?
+        </h2>
+        <p class="text-xl opacity-90 mb-8">
+          Join thousands of creators who are saving time and money with our
+          AI-powered platform
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            class="bg-white text-purple-600 px-8 py-3 rounded-md text-sm font-medium hover:bg-gray-100 transition transform hover:scale-105"
+          >
+            Start Free Trial
+          </button>
+          <button
+            class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-md text-sm font-medium hover:bg-white hover:text-purple-600 transition transform hover:scale-105"
+          >
+            Schedule Demo
+          </button>
         </div>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
-      <div class="container mx-auto px-4">
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 class="text-xl font-bold mb-4">AI Content Generator</h3>
-            <p class="text-gray-400">
-              Công nghệ AI giúp bạn tạo nội dung chất lượng từ các nguồn tin tức
-              hàng đầu.
+            <div class="flex items-center mb-4">
+              <i class="fas fa-robot text-2xl text-purple-400 mr-2"></i>
+              <span class="text-xl font-bold">AI Content Creator</span>
+            </div>
+            <p class="text-gray-400 mb-4">
+              The most advanced AI-powered content generation platform for
+              modern publishers and creators.
             </p>
-          </div>
-          <div>
-            <h4 class="font-semibold mb-4">Liên kết</h4>
-            <ul class="space-y-2">
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition"
-                  >Trang chủ</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition"
-                  >Về chúng tôi</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition"
-                  >Dịch vụ</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition"
-                  >Liên hệ</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="font-semibold mb-4">Hỗ trợ</h4>
-            <ul class="space-y-2">
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition"
-                  >FAQ</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition"
-                  >Hướng dẫn sử dụng</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white transition"
-                  >Chính sách bảo mật</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="font-semibold mb-4">Kết nối</h4>
             <div class="flex space-x-4">
-              <a
-                href="#"
-                class="bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition"
-              >
-                <i class="fab fa-facebook-f"></i>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-twitter"></i>
               </a>
-              <a
-                href="#"
-                class="bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition"
-              >
-                <i class="fab fa-youtube"></i>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-facebook"></i>
               </a>
-              <a
-                href="#"
-                class="bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center hover:bg-purple-600 transition"
-              >
-                <i class="fab fa-tiktok"></i>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white">
+                <i class="fab fa-instagram"></i>
               </a>
             </div>
-            <p class="mt-4 text-gray-400">Email: support@aicontent.com</p>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Product</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Features</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Pricing</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Demo</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Updates</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Resources</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Blog</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white"
+                  >Help Center</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Tutorials</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">API Docs</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Company</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">About Us</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Careers</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Legal</a>
+              </li>
+            </ul>
           </div>
         </div>
+
         <div
-          class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400"
+          class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center"
         >
-          <p>© 2025 AI Content Generator. All rights reserved.</p>
+          <p class="text-gray-400 mb-4 md:mb-0">
+            © 2025 AI Content Creator. All rights reserved.
+          </p>
+          <div class="flex space-x-6">
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Privacy Policy</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Terms of Service</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Cookie Policy</a
+            >
+          </div>
         </div>
       </div>
     </footer>
 
     <script>
-      const sampleArticles = [
-        {
-          title: "AI phân tích: Xu hướng thị trường chứng khoán 2023",
-          summary:
-            "Bài viết được AI tổng hợp từ các bài báo trên VNExpress về xu hướng thị trường chứng khoán trong năm 2023 với những dự báo quan trọng.",
-          category: "Kinh doanh",
-          date: "15 phút trước",
-          image:
-            "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          title: "Công nghệ AI thay đổi ngành giáo dục như thế nào?",
-          summary:
-            "Phân tích từ AI về các bài viết trên VNExpress cho thấy sự thay đổi mạnh mẽ của AI trong lĩnh vực giáo dục và đào tạo.",
-          category: "Giáo dục",
-          date: "1 giờ trước",
-          image:
-            "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          title: "Bóng đá Việt Nam: Triển vọng tại giải đấu quốc tế",
-          summary:
-            "AI tổng hợp thông tin từ VNExpress về triển vọng của đội tuyển bóng đá Việt Nam tại các giải đấu quốc tế sắp tới.",
-          category: "Thể thao",
-          date: "3 giờ trước",
-          image:
-            "https://images.unsplash.com/photo-1579952363872-3f0730fdd9a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-      ];
-
-      const sampleVideos = [
-        {
-          title: "AI tóm tắt: Diễn biến kinh tế thế giới tuần qua",
-          views: "12.4K lượt xem",
-          duration: "4:32",
-          image:
-            "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          title: "Công nghệ mới trong y tế được AI phân tích",
-          views: "8.7K lượt xem",
-          duration: "6:15",
-          image:
-            "https://images.unsplash.com/photo-1579684385127-1ef15d281118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          title: "Xu hướng du lịch 2023 theo AI",
-          views: "15.2K lượt xem",
-          duration: "5:08",
-          image:
-            "https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1468&q=80",
-        },
-        {
-          title: "AI giải thích về biến đổi khí hậu",
-          views: "9.1K lượt xem",
-          duration: "7:42",
-          image:
-            "https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80",
-        },
-      ];
-
-      const loginBtn = document.getElementById("loginBtn");
-      const loginModal = document.getElementById("loginModal");
-      const closeModal = document.getElementById("closeModal");
-      const fetchBtn = document.getElementById("fetchBtn");
-      const loading = document.getElementById("loading");
-      const articlesSection = document.getElementById("articlesSection");
-      const videosSection = document.getElementById("videosSection");
-
-      loginBtn.addEventListener("click", () => {
-        loginModal.classList.remove("hidden");
-      });
-
-      closeModal.addEventListener("click", () => {
-        loginModal.classList.add("hidden");
-      });
-
-      fetchBtn.addEventListener("click", () => {
-        loading.classList.remove("hidden");
-        articlesSection.classList.add("hidden");
-        videosSection.classList.add("hidden");
-
-        setTimeout(() => {
-          loading.classList.add("hidden");
-          articlesSection.classList.remove("hidden");
-          videosSection.classList.remove("hidden");
-          renderContent();
-        }, 1500);
-      });
-
-      function renderContent() {
-        const articlesContainer = articlesSection.querySelector(".grid");
-        const videosContainer = videosSection.querySelector(".grid");
-
-        articlesContainer.innerHTML = "";
-        videosContainer.innerHTML = "";
-
-        sampleArticles.forEach((article) => {
-          const articleCard = document.createElement("div");
-          articleCard.className =
-            "bg-white rounded-xl shadow-md overflow-hidden article-card transition duration-300";
-          articleCard.innerHTML = `
-                    <img src="${article.image}" alt="${article.title}" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="bg-purple-100 text-purple-600 text-xs font-semibold px-3 py-1 rounded-full">${article.category}</span>
-                            <span class="text-gray-500 text-sm">${article.date}</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">${article.title}</h3>
-                        <p class="text-gray-600 mb-4">${article.summary}</p>
-                        <div class="flex justify-between items-center">
-                            <button class="text-purple-600 font-semibold hover:underline">Xem chi tiết</button>
-                            <button class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition">
-                                <i class="fas fa-download mr-1"></i> Tải xuống
-                            </button>
-                        </div>
-                    </div>
-                `;
-          articlesContainer.appendChild(articleCard);
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+          });
         });
+      });
 
-        sampleVideos.forEach((video) => {
-          const videoCard = document.createElement("div");
-          videoCard.className =
-            "bg-white rounded-lg shadow-md overflow-hidden transition duration-300";
-          videoCard.innerHTML = `
-                    <div class="relative video-thumbnail">
-                        <img src="${video.image}" alt="${video.title}" class="w-full h-40 object-cover">
-                        <div class="absolute bottom-3 right-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm">${video.duration}</div>
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                            <div class="bg-white bg-opacity-80 rounded-full w-12 h-12 flex items-center justify-center">
-                                <i class="fas fa-play text-purple-600 text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold mb-1 line-clamp-2">${video.title}</h3>
-                        <p class="text-gray-500 text-sm">${video.views}</p>
-                        <button class="mt-3 w-full bg-purple-600 text-white py-2 rounded-lg text-sm hover:bg-purple-700 transition">
-                            <i class="fas fa-magic mr-1"></i> Tạo video tương tự
-                        </button>
-                    </div>
-                `;
-          videosContainer.appendChild(videoCard);
+      // Animation for input fields
+      const inputs = document.querySelectorAll("input");
+      inputs.forEach((input) => {
+        input.addEventListener("focus", () => {
+          input.classList.add("input-animate");
         });
-      }
-
-      renderContent();
+        input.addEventListener("blur", () => {
+          input.classList.remove("input-animate");
+        });
+      });
     </script>
   </body>
 </html>
